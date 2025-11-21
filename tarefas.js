@@ -2,86 +2,89 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 
-// Lista todas as tarefas
+// LISTAR TAREFAS (GET)
 router.get('/', (req, res) => {
-    const tarefas = db.prepare(`SELECT * FROM tarefas ORDER BY data_criacao DESC`).all();
+    const sql = `SELECT * FROM tarefas ORDER BY data_criacao DESC`;
+    const tarefas = db.prepare(sql).all();
     res.json(tarefas);
 });
 
-// Cria nova tarefa
+// CRIAR TAREFA (POST)
 router.post('/', (req, res) => {
     const { titulo, descricao, data_vencimento, prioridade } = req.body;
 
-    if (!titulo || titulo.trim() === '') {
-        return res.status(400).json({ error: 'Título obrigatório' });
+    if (!titulo || titulo.trim() === "") {
+        return res.status(400).json({ error: "Título obrigatório" });
     }
 
-    const stmt = db.prepare(`
-        INSERT INTO tarefas (titulo, descricao, data_criacao, data_vencimento, prioridade, status)
-        VALUES (?, ?, datetime('now'), ?, ?, 'pendente')
-    `);
+    const sql = `
+        INSERT INTO tarefas (titulo, descricao, data_vencimento, prioridade, data_criacao)
+        VALUES (?, ?, ?, ?, ?)
+    `;
 
+    const stmt = db.prepare(sql);
     const result = stmt.run(
         titulo.trim(),
-        descricao || '',
+        descricao || "",
         data_vencimento || null,
-        prioridade || 'media'
+        prioridade || "media",
+        new Date().toISOString()
     );
 
-    const novaTarefa = db.prepare(`SELECT * FROM tarefas WHERE id = ?`).get(result.lastInsertRowid);
+    const novaTarefa = db.prepare("SELECT * FROM tarefas WHERE id = ?").get(result.lastInsertRowid);
     res.status(201).json(novaTarefa);
 });
 
-
+// BUSCAR POR ID (GET)
 router.get('/:id', (req, res) => {
-    const tarefa = db.prepare(`SELECT * FROM tarefas WHERE id = ?`).get(req.params.id);
+    const id = req.params.id;
+    const tarefa = db.prepare("SELECT * FROM tarefas WHERE id = ?").get(id);
 
-    if (!tarefa) return res.status(404).json({ error: 'Tarefa não encontrada' });
+    if (!tarefa) return res.status(404).json({ error: "Tarefa não encontrada" });
 
     res.json(tarefa);
 });
 
-// Atualiza uma tarefa
+// ATUALIZAR TAREFA (PUT)
 router.put('/:id', (req, res) => {
     const id = req.params.id;
-    const existente = db.prepare(`SELECT * FROM tarefas WHERE id = ?`).get(id);
+    const { titulo, descricao, data_vencimento, prioridade } = req.body;
 
-    if (!existente) {
-        return res.status(404).json({ error: 'Tarefa não existe' });
-    }
+    const existente = db.prepare("SELECT * FROM tarefas WHERE id = ?").get(id);
+    if (!existente) return res.status(404).json({ error: "Tarefa não encontrada" });
 
-    const { titulo, descricao, data_vencimento, prioridade, status } = req.body;
-
-    db.prepare(`
+    const sql = `
         UPDATE tarefas SET
-        titulo = ?,
-        descricao = ?,
-        data_vencimento = ?,
-        prioridade = ?,
-        status = ?
+            titulo = ?,
+            descricao = ?,
+            data_vencimento = ?,
+            prioridade = ?
         WHERE id = ?
-    `).run(
+    `;
+
+    db.prepare(sql).run(
         titulo || existente.titulo,
         descricao || existente.descricao,
         data_vencimento || existente.data_vencimento,
         prioridade || existente.prioridade,
-        status || existente.status,
         id
     );
 
-    const atualizada = db.prepare(`SELECT * FROM tarefas WHERE id = ?`).get(id);
+    const atualizada = db.prepare("SELECT * FROM tarefas WHERE id = ?").get(id);
     res.json(atualizada);
 });
 
-// Delete Tarefa
+// DELETAR TAREFA (DELETE)
 router.delete('/:id', (req, res) => {
-    const result = db.prepare(`DELETE FROM tarefas WHERE id = ?`).run(req.params.id);
+    const id = req.params.id;
+
+    const result = db.prepare("DELETE FROM tarefas WHERE id = ?").run(id);
 
     if (result.changes === 0) {
-        return res.status(404).json({ error: 'Tarefa não encontrada' });
+        return res.status(404).json({ error: "Tarefa não encontrada" });
     }
 
-    res.json({ mensagem: 'Tarefa deletada com sucesso' });
+    res.json({ message: "Tarefa deletada com sucesso" });
 });
 
 module.exports = router;
