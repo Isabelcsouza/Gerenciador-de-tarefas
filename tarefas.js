@@ -2,14 +2,14 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 
-// LISTAR TAREFAS (GET)
+// Lista tarefas (GET)
 router.get('/', (req, res) => {
     const sql = `SELECT * FROM tarefas ORDER BY data_criacao DESC`;
     const tarefas = db.prepare(sql).all();
     res.json(tarefas);
 });
 
-// CRIAR TAREFA (POST)
+// Cria tarefas (POST)
 router.post('/', (req, res) => {
     const { titulo, descricao, data_vencimento, prioridade } = req.body;
 
@@ -35,7 +35,7 @@ router.post('/', (req, res) => {
     res.status(201).json(novaTarefa);
 });
 
-// BUSCAR POR ID (GET)
+// Busca por ID (GET)
 router.get('/:id', (req, res) => {
     const id = req.params.id;
     const tarefa = db.prepare("SELECT * FROM tarefas WHERE id = ?").get(id);
@@ -45,7 +45,7 @@ router.get('/:id', (req, res) => {
     res.json(tarefa);
 });
 
-// ATUALIZAR TAREFA (PUT)
+// Atualiza a tarefa (PUT)
 router.put('/:id', (req, res) => {
     const id = req.params.id;
     const { titulo, descricao, data_vencimento, prioridade } = req.body;
@@ -74,7 +74,7 @@ router.put('/:id', (req, res) => {
     res.json(atualizada);
 });
 
-// DELETAR TAREFA (DELETE)
+// Deleta tarefa (DELETE)
 router.delete('/:id', (req, res) => {
     const id = req.params.id;
 
@@ -88,3 +88,4 @@ router.delete('/:id', (req, res) => {
 });
 
 module.exports = router;
+
