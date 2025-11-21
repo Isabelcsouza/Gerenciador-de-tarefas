@@ -1,5 +1,4 @@
-# Gerenciador-de-tarefas
-Aplicação completa para gerenciamento de tarefas
+
 # 📘 Gerenciador de Tarefas
 
 Aplicação completa para gerenciamento de tarefas, construída em **Node.js**, **Express**, **SQLite** e **HTML/CSS/JS**.  
