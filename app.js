@@ -10,7 +10,7 @@ const btnCancelar = document.getElementById("btnCancelar");
 
 const lista = document.getElementById("listaTarefas");
 
-//FUNÇÃO PARA LISTAR TAREFAS
+
 
 async function carregarTarefas() {
 
@@ -48,7 +48,7 @@ async function carregarTarefas() {
     });
 }
 
-//SALVAR OU EDITAR TAREFA
+
 
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -86,7 +86,7 @@ form.addEventListener("submit", async (e) => {
     carregarTarefas();
 });
 
-//CARREGAR TAREFA PARA EDIÇÃO
+
 window.editar = async function (id) {
 
     const resposta = await fetch(`${apiUrl}/${id}`);
@@ -102,7 +102,7 @@ window.editar = async function (id) {
 };
 
 
-//CANCELAR EDIÇÃO
+
 
 btnCancelar.addEventListener("click", () => {
     form.reset();
@@ -111,7 +111,7 @@ btnCancelar.addEventListener("click", () => {
 });
 
 
-// REMOVER TAREFA
+
 
 window.remover = async function (id) {
 
@@ -128,3 +128,4 @@ window.remover = async function (id) {
 
 
 carregarTarefas();
+
