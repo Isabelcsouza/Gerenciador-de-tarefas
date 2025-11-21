@@ -60,8 +60,7 @@ https://www.sqlite.org/download.html
 Depois, adicione o arquivo sqlite3.exe ao PATH do Windows.
 
 🔹 4. Iniciar o servidor
-sh
-Copiar código
+
 node src/server.js
 Servidor rodando em:
 👉 http://localhost:3000
