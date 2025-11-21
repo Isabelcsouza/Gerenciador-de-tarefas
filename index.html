@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciador de Tarefas</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>Gerenciador de Tarefas</h1>
+    </header>
+
+    <main>
+
+        <!-- formulário de tarefas -->
+    
+        <section class="cartao-tarefa">
+            <h2>Incluir Tarefa</h2>
+
+            <form id="formTarefa">
+
+                <input type="hidden" id="tarefaId">
+
+                <label>Título *</label>
+                <input type="text" id="titulo" required>
+
+                <label>Descrição</label>
+                <textarea id="descricao" required></textarea>
+
+                <label>Data de vencimento</label>
+                <input type="date" id="data_vencimento">
+
+                <label>Prioridade</label>
+                <select id="prioridade">
+                    <option value="baixa">Baixa</option>
+                    <option value="media">Média</option>
+                    <option value="alta">Alta</option>
+                </select>
+
+                <div class="botoes">
+                    <button type="submit" class="btn-salvar">Salvar</button>
+                    <button type="button" class="btn-cancelar" id="btnCancelar" style="display:none;">Cancelar</button>
+                </div>
+
+            </form>
+        </section>
+
+        <!-- Lista de Tarefas -->
+    
+        <section class="lista-container">
+            <h2>Tarefas Cadastradas</h2>
+            <div id="listaTarefas" class="lista-tarefas"></div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Gerenciador de Tarefas © 2025</p>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
